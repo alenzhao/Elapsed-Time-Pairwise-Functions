@@ -217,7 +217,7 @@ ggplot(subset(elapsed_data, env=="win" & ide=="R"), aes(x=ptype, y=elapsed, colo
 
 ![](ggpairs_files/figure-markdown_github/unnamed-chunk-5-4.png)
 
-For comparison purposes, I kept the dimensions of each graph identical. In these visualizations we can begin to see that there is an exponential growth in time elapsed based on the number of variables in the pairwise function.
+For comparison purposes, I kept the dimensions of each graph identical. In these visualizations we can begin to see that there is an exponential growth in time elapsed based on the number of variables in the pairwise function. Obviously, the effect is most pronounced for ggpairs.
 
 Now let's take a look at an analysis of variance. As you can see, each one of our suspected interactions is highly significant.
 
@@ -374,7 +374,7 @@ summary(model_full_log_op)
 
 Now, notice that adding order\_op only increases our predictive power (both R-squared and adjusted R-squared) by 0.2%. For a more parsimonious model, we could probably leave this variable out.
 
-However, I do believe this variable suggests an interesting, and possibly overlooked dynamic. Although order\_op is technically measuring the number of iterations in of a loop, it is actually providing insight into how many successive tasks the computing environment has performed without a break. On certain machines, especially those designed for low power usage or those without a dedicated cooling mechanism, the number of successive tasks will have an adverse affect on elapsed time.
+However, I do believe this variable suggests an interesting, and possibly overlooked dynamic. Although order\_op is technically measuring the number of iterations in a loop, it is actually providing insight into how many successive tasks the computing environment has performed without a break. On certain machines, especially those designed for low power usage or those without a dedicated cooling mechanism, the number of successive tasks will have an adverse affect on elapsed time.
 
 Summary
 -------
