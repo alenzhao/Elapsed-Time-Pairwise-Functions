@@ -77,7 +77,7 @@ IDEs and Computing Environment
 
 From my own research into this issue, it was clear to me that not all users were experiencing issues with ggpairs. I decided to test my IDE, and so ran all code on both RStudio and R, tagging my outcomes as such.
 
-I also performed a very basic test of computing environment. Not having many resources at my disposal, I tested all code (including both IDEs) on two machines. I have listed below the differences in GPU, which I believe is likely the main driver of any significant effects. For brevity, I labeled these machines "win" and "mac", but their differences are obviously more extreme than just operating system. Further work would need to be done to truly quantify the effect of the computing environment.
+I also performed a very basic test of computing environment. Not having many resources at my disposal, I tested all code (including both IDEs) on two machines. I have listed below the differences in GPU, which I believe is likely the main driver of any significant effects. For brevity, I labeled these machines "low gpu" and "high gpu", but their differences are obviously many. Further work would need to be done to truly quantify the effect of the computing environment.
 
 <table style="width:96%;">
 <colgroup>
@@ -88,8 +88,8 @@ I also performed a very basic test of computing environment. Not having many res
 <thead>
 <tr class="header">
 <th align="left">Field</th>
-<th align="left">&quot;win&quot;</th>
-<th align="left">&quot;mac&quot;</th>
+<th align="left">&quot;high gpu&quot;</th>
+<th align="left">&quot;low gpu&quot;</th>
 </tr>
 </thead>
 <tbody>
@@ -158,13 +158,13 @@ elapsed_data <- read.csv("elapsed.csv", header=TRUE)
 head(elapsed_data)
 ```
 
-    ##   order ptype vars    elapsed env ide
-    ## 1     1 pairs    2 0.07813406 win   R
-    ## 2     2 pairs    3 0.07902503 win   R
-    ## 3     3 pairs    4 0.09377098 win   R
-    ## 4     4 pairs    5 0.07813311 win   R
-    ## 5     5 pairs    6 0.10937905 win   R
-    ## 6     6 pairs    7 0.11398101 win   R
+    ##   order ptype vars    elapsed      env ide
+    ## 1     1 pairs    2 0.07813406 high_gpu   R
+    ## 2     2 pairs    3 0.07902503 high_gpu   R
+    ## 3     3 pairs    4 0.09377098 high_gpu   R
+    ## 4     4 pairs    5 0.07813311 high_gpu   R
+    ## 5     5 pairs    6 0.10937905 high_gpu   R
+    ## 6     6 pairs    7 0.11398101 high_gpu   R
 
 ``` r
 str(elapsed_data)
@@ -175,13 +175,13 @@ str(elapsed_data)
     ##  $ ptype  : Factor w/ 4 levels "car","ggpairs",..: 3 3 3 3 3 3 3 3 3 3 ...
     ##  $ vars   : int  2 3 4 5 6 7 8 9 10 2 ...
     ##  $ elapsed: num  0.0781 0.079 0.0938 0.0781 0.1094 ...
-    ##  $ env    : Factor w/ 2 levels "mac","win": 2 2 2 2 2 2 2 2 2 2 ...
+    ##  $ env    : Factor w/ 2 levels "high_gpu","low_gpu": 1 1 1 1 1 1 1 1 1 1 ...
     ##  $ ide    : Factor w/ 2 levels "R","RStudio": 1 1 1 1 1 1 1 1 1 1 ...
 
 Analysis
 --------
 
-Once we visualize the distribution of data, several issues become clear. Here we see a boxplot for each function type, broken down by computing environment and then IDE. There is an obvious spike in elapsed time with ggpairs on "mac" using RStudio.
+Once we visualize the distribution of data, several issues become clear. Here we see a boxplot for each function type, broken down by computing environment and then IDE. There is an obvious spike in elapsed time with ggpairs on "low\_gpu" using RStudio.
 
 ``` r
 library(ggplot2)
@@ -194,25 +194,25 @@ But is that the end of the story? What about the number of variables used in a p
 
 ``` r
 #scatterplot by ptype, across subsets
-ggplot(subset(elapsed_data, env=="mac" & ide=="RStudio"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of Mac / RStudio")
+ggplot(subset(elapsed_data, env=="low_gpu" & ide=="RStudio"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of low_gpu / RStudio")
 ```
 
 ![](ggpairs_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
 ``` r
-ggplot(subset(elapsed_data, env=="mac" & ide=="R"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of Mac / R")
+ggplot(subset(elapsed_data, env=="low_gpu" & ide=="R"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of low_gpu / R")
 ```
 
 ![](ggpairs_files/figure-markdown_github/unnamed-chunk-5-2.png)
 
 ``` r
-ggplot(subset(elapsed_data, env=="win" & ide=="RStudio"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of Win / RStudio")
+ggplot(subset(elapsed_data, env=="high_gpu" & ide=="RStudio"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of high_gpu / RStudio")
 ```
 
 ![](ggpairs_files/figure-markdown_github/unnamed-chunk-5-3.png)
 
 ``` r
-ggplot(subset(elapsed_data, env=="win" & ide=="R"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of Win / R")
+ggplot(subset(elapsed_data, env=="high_gpu" & ide=="R"), aes(x=ptype, y=elapsed, color=ptype)) + geom_point() + scale_color_brewer(type='qual', palette=2) + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of high_gpu / R")
 ```
 
 ![](ggpairs_files/figure-markdown_github/unnamed-chunk-5-4.png)
@@ -253,12 +253,12 @@ summary(model_full)
     ## 
     ## Coefficients:
     ##              Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  -4.34183    0.46199  -9.398   <2e-16 ***
+    ## (Intercept)  -8.22012    0.46199 -17.793   <2e-16 ***
     ## vars          0.84535    0.05299  15.952   <2e-16 ***
     ## ptypeggpairs  9.30567    0.38701  24.045   <2e-16 ***
     ## ptypepairs   -0.31808    0.38701  -0.822    0.411    
     ## ptypesplom   -0.11854    0.38701  -0.306    0.759    
-    ## envwin       -3.87829    0.27366 -14.172   <2e-16 ***
+    ## envlow_gpu    3.87829    0.27366  14.172   <2e-16 ***
     ## ideRStudio    3.35518    0.27366  12.260   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
@@ -284,12 +284,12 @@ summary(model_full_log)
     ## 
     ## Coefficients:
     ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)  -2.452897   0.021463 -114.29   <2e-16 ***
+    ## (Intercept)  -3.567777   0.021463 -166.23   <2e-16 ***
     ## vars          0.296191   0.002462  120.31   <2e-16 ***
     ## ptypeggpairs  2.322584   0.017979  129.18   <2e-16 ***
     ## ptypepairs   -1.157166   0.017979  -64.36   <2e-16 ***
     ## ptypesplom   -0.225838   0.017979  -12.56   <2e-16 ***
-    ## envwin       -1.114881   0.012713  -87.69   <2e-16 ***
+    ## envlow_gpu    1.114881   0.012713   87.69   <2e-16 ***
     ## ideRStudio    0.232865   0.012713   18.32   <2e-16 ***
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
@@ -314,12 +314,12 @@ for (x in 1:nrow(elapsed_data)) {
 A visualization should help elucidate.
 
 ``` r
-ggplot(subset(elapsed_data, env=="mac" & ide=="RStudio"), aes(x=ptype, y=elapsed, color=order_op)) + geom_point() + scale_color_gradient(low='#05D9F6', high='#5011D1') + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of Mac / RStudio")
+ggplot(subset(elapsed_data, env=="low_gpu" & ide=="RStudio"), aes(x=ptype, y=elapsed, color=order_op)) + geom_point() + scale_color_gradient(low='#05D9F6', high='#5011D1') + ylim(0,150) + facet_wrap(~ vars, ncol=9) + labs(title="Across Subset of low_gpu / RStudio")
 ```
 
 ![](ggpairs_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
-As you can see, as the code approaches it's 30th loop, elapsed time increases. The effect is more pronounced for a higher number of variables, corresponding to the previously seen exponential growth. This effect is most noticeable for ggpairs on "mac" using RStudio.
+As you can see, as the code approaches it's 30th loop, elapsed time increases. The effect is more pronounced for a higher number of variables, corresponding to the previously seen exponential growth. This effect is most noticeable for ggpairs on "low\_gpu" using RStudio.
 
 But is it significant?
 
@@ -357,12 +357,12 @@ summary(model_full_log_op)
     ## 
     ## Coefficients:
     ##                Estimate Std. Error  t value Pr(>|t|)    
-    ## (Intercept)  -2.4876336  0.0242711 -102.494  < 2e-16 ***
+    ## (Intercept)  -3.6025142  0.0242711 -148.428  < 2e-16 ***
     ## vars          0.2961910  0.0024595  120.425  < 2e-16 ***
     ## ptypeggpairs  2.3225840  0.0179620  129.305  < 2e-16 ***
     ## ptypepairs   -1.1571658  0.0179620  -64.423  < 2e-16 ***
     ## ptypesplom   -0.2258382  0.0179620  -12.573  < 2e-16 ***
-    ## envwin       -1.1148805  0.0127011  -87.779  < 2e-16 ***
+    ## envlow_gpu    1.1148805  0.0127011   87.779  < 2e-16 ***
     ## ideRStudio    0.2328654  0.0127011   18.334  < 2e-16 ***
     ## order_op      0.0022411  0.0007337    3.054  0.00227 ** 
     ## ---
